@@ -83,9 +83,7 @@ pipeline {
             steps {
                   sshagent(['sshkey']) {
                        
-                        sh "scp -o StrictHostKeyChecking=no Dockerfile root@192.168.1.235:/root/demo"
-                       /* sh "scp -o StrictHostKeyChecking=no create-container-image.yaml root@192.168.1.235:/root/" */
-                        sh "scp -o StrictHostKeyChecking=no deployment.yaml root@192.168.1.222:/root/demo"
+                        sh "scp -o StrictHostKeyChecking=no deploy-tomcat.yaml root@192.168.1.239:/root/"
                     }
                 }
             
@@ -99,11 +97,18 @@ pipeline {
 			         }
       }
 
-     stage ('Deploy') {
-        steps {
-           ansibleTower jobTemplate: 'Dockerrepo-k8s-deploy', jobType: 'run', throwExceptionWhenFail: false, towerCredentialsId: 'tower', towerLogLevel: 'false', towerServer: 'ansibleTower'
-				      }
-      }
+    stage('Deploy Artifacts to Production') {
+            
+            steps {
+                  sshagent(['sshkey']) {
+                       
+                        sh "ssh -o StrictHostKeyChecking=no ec2-user@192.168.1.239 -C \"sudo ansible-playbook /root/deploy-tomcat.yml\""
+                                                
+                    }
+                }
+            
+        }      
+        
         /* end */
     }
 }
