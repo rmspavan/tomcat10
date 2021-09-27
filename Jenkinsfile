@@ -18,23 +18,24 @@ pipeline {
               }
          }
 
-      stage("Unit Test") {
+      stage("Unit Test & Integration Test") {
             steps {
                 script {
                     // Test complied source code
                     sh "mvn -B clean test" 
+                    sh "mvn -B clean verify -DskipTests=true"
                 }
             }
       }
 
-      stage("Integration Test") {
+      /*stage("Integration Test") {
             steps {
                 script {
                     // Run checks on results of integration tests to ensure quality criteria are met
                     sh "mvn -B clean verify -DskipTests=true" 
                 }
             }
-      }
+      }*/
 
       stage ('SonarQube Analysis') {
         steps {
@@ -78,16 +79,11 @@ pipeline {
             rtPublishBuildInfo(
                 serverId: "Artifactory"
             )
-            {
-                  sshagent(['sshkey']) {
-                       
-                        sh "scp -o StrictHostKeyChecking=no deploy-tomcat.yaml root@192.168.1.239:/root/demo/"
-                    }
-                }
-
+            
           }
       }  
-      /*stage('Copy') {
+      
+      stage('Copy') {
             
             steps {
                   sshagent(['sshkey']) {
@@ -95,8 +91,7 @@ pipeline {
                         sh "scp -o StrictHostKeyChecking=no deploy-tomcat.yaml root@192.168.1.239:/root/demo/"
                     }
                 }
-            
-        } */ 
+      } 
 
       stage('Waiting for Approvals') {
             
