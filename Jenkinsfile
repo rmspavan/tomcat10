@@ -17,7 +17,25 @@ pipeline {
                    sh "mvn package"
               }
          }
-    
+
+      stage("Unit Test") {
+            steps {
+                script {
+                    // Test complied source code
+                    sh "mvn -B clean test" 
+                }
+            }
+      }
+
+      stage("Integration Test") {
+            steps {
+                script {
+                    // Run checks on results of integration tests to ensure quality criteria are met
+                    sh "mvn -B clean verify -DskipTests=true" 
+                }
+            }
+      }
+
       stage ('SonarQube Analysis') {
         steps {
               withSonarQubeEnv('sonar') {
@@ -60,9 +78,16 @@ pipeline {
             rtPublishBuildInfo(
                 serverId: "Artifactory"
             )
+            {
+                  sshagent(['sshkey']) {
+                       
+                        sh "scp -o StrictHostKeyChecking=no deploy-tomcat.yaml root@192.168.1.239:/root/demo/"
+                    }
+                }
+
           }
       }  
-      stage('Copy') {
+      /*stage('Copy') {
             
             steps {
                   sshagent(['sshkey']) {
@@ -71,7 +96,7 @@ pipeline {
                     }
                 }
             
-        } 
+        } */ 
 
       stage('Waiting for Approvals') {
             
@@ -87,6 +112,7 @@ pipeline {
                   sshagent(['sshkey']) {
                        
                         sh "ssh -o StrictHostKeyChecking=no root@192.168.1.239 -C \"sudo ansible-playbook /root/demo/deploy-tomcat.yaml\""
+                        
                                                 
                     }
                 }
