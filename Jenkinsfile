@@ -81,7 +81,7 @@ pipeline {
 			         }
       }
 
-    stage('Deploy Artifacts to Production') {
+      stage('Deploy Artifacts to Production') {
             
             steps {
                   sshagent(['sshkey']) {
@@ -93,6 +93,6 @@ pipeline {
             
         }      
         
-        /* end */
+     
     }
 }
