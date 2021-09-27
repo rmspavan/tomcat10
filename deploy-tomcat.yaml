@@ -1,7 +1,7 @@
 #Create Custom Container Image
 #Push to DockerHub Registry
 ---
-- hosts: 192.168.1.239
+- hosts: localhost
   tasks: 
 
 
