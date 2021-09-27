@@ -1,0 +1,42 @@
+#Deployment
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demoapp
+  labels:
+    app: demoapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: demoapp
+  template:
+    metadata:
+      labels:
+        app: demoapp
+    spec:
+      containers:
+      - name: demoapp-container
+        image: 192.168.1.212:5000/demoapp
+        ports:
+        - containerPort: 8080
+...
+
+#Service Type nodePort
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: demoapp-service
+  labels:
+    app: demoapp
+spec:
+  selector:
+    app: demoapp
+  type: NodePort
+  ports:
+  - nodePort: 31010
+    port: 8080
+    targetPort: 8080
+...
