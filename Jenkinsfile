@@ -86,7 +86,7 @@ pipeline {
             steps {
                   sshagent(['sshkey']) {
                        
-                        sh "ssh -o StrictHostKeyChecking=no root@192.168.1.239 -C \"sudo ansible-playbook /root/demo/deploy-tomcat.yml\""
+                        sh "ssh -o StrictHostKeyChecking=no root@192.168.1.239 -C \"sudo ansible-playbook /root/demo/deploy-tomcat.yaml\""
                                                 
                     }
                 }
