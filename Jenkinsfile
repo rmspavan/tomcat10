@@ -7,7 +7,7 @@ pipeline {
 
       stage ('Checkout SCM'){
         steps {
-          checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'git', url: 'https://github.com/rmspavan/jenkins-ansible.git']]])
+          checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'git', url: 'https://github.com/rmspavan/tomcat10.git']]])
               }
       }
     	  
@@ -17,28 +17,10 @@ pipeline {
                    sh "mvn package"
               }
          }
-
-      stage("Unit Test") {
-            steps {
-                script {
-                    // Test complied source code
-                    sh "mvn -B clean test" 
-                }
-            }
-      }
-
-      stage("Integration Test") {
-            steps {
-                script {
-                    // Run checks on results of integration tests to ensure quality criteria are met
-                    sh "mvn -B clean verify -DskipTests=true" 
-                }
-            }
-      }
-
+    
       stage ('SonarQube Analysis') {
         steps {
-              withSonarQubeEnv('sonarq') {
+              withSonarQubeEnv('sonar') {
                  sh 'mvn -U clean install sonar:sonar'
 				      }
           }
@@ -53,22 +35,25 @@ pipeline {
              password: 'P@ssw0rd',
              bypassProxy: true,
              timeout: 300
-                    ) 
-           rtUpload (
-              serverId: "Artifactory" ,
-              spec: '''{
-                 "files": [
-                    {
-                      "pattern": "*.war",
-                      "target": "jenkins-libs-snapshot"
-                    }
-                          ]
-                       }''',
-                      ) 
-                 
+                    )    
               }
-
       }    
+    
+	    stage ('Upload')  {
+	      steps {
+                 rtUpload (
+                    serverId: "Artifactory" ,
+                    spec: '''{
+                       "files": [
+                         {
+                           "pattern": "*.war",
+                           "target": "webapp-libs-snapshot-local"
+                         }
+                                ]
+                              }''',
+                          ) 
+              }
+      }
     
       stage ('Publish build info') {
         steps{
@@ -76,8 +61,7 @@ pipeline {
                 serverId: "Artifactory"
             )
           }
-      }    
-
+      }  
       stage('Copy') {
             
             steps {
