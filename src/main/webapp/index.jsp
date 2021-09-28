@@ -1,5 +1,5 @@
 <html>
 <body>
-<h2 stype="colour: red">Deployed webapp application on Tomact:v2.0</h2>
+<h2 stype="colour: red">Successfully deployed webapp application on Tomact:v10</h2>
 </body>
 </html>
