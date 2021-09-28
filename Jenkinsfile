@@ -55,13 +55,10 @@ pipeline {
              bypassProxy: true,
              timeout: 300
                     )    
-              }
-      }    
+      
     
-	    stage ('Upload')  {
-	      steps {
-                 rtUpload (
-                    serverId: "Artifactory" ,
+	         rtUpload (
+              serverId: "Artifactory" ,
                     spec: '''{
                        "files": [
                          {
