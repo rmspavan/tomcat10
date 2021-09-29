@@ -3,7 +3,6 @@ pipeline {
   tools {
     maven 'M2_HOME'
         }
-    }
     stages {
 
       stage ('Checkout SCM'){
