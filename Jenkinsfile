@@ -17,15 +17,12 @@ pipeline {
               }
          }
 
-//       stage("Unit Test & Integration Test") {
-//             steps {
-//                 script {
-//                     // Test complied source code
-//                     sh "mvn -B clean test" 
-//                     sh "mvn -B clean verify -DskipTests=true"
-//                 }
-//             }
-//       }
+      stage('Waiting for Approvals') { 
+        steps{
+
+              input('Test Completed ? Please provide  Approvals for Prod Release ?')
+             }
+      } 
 
 //       /*stage("Integration Test") {
 //             steps {
