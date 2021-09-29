@@ -17,29 +17,20 @@ pipeline {
               }
          }
 
-      stage('Waiting for Approvals') { 
-        steps{
+      stage ('SonarQube Analysis') {
+        steps {
+              withSonarQubeEnv('sonar') {
+                 sh 'mvn -U clean install sonar:sonar'
+				      }
+          }
+      }
 
-              input('Test Completed ? Please provide  Approvals for Prod Release ?')
-             }
-      } 
+      // stage('Waiting for Approvals') { 
+      //   steps{
 
-//       /*stage("Integration Test") {
-//             steps {
-//                 script {
-//                     // Run checks on results of integration tests to ensure quality criteria are met
-//                     sh "mvn -B clean verify -DskipTests=true" 
-//                 }
-//             }
-//       }*/
-
-//       stage ('SonarQube Analysis') {
-//         steps {
-//               withSonarQubeEnv('sonar') {
-//                  sh 'mvn -U clean install sonar:sonar'
-// 				      }
-//           }
-//       }
+      //         input(' ?')
+      //        }
+      // }   
     
 // 	    stage ('Artifact')  {
 // 	      steps {
