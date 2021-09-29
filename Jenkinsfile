@@ -67,37 +67,31 @@ pipeline {
           }
       }  
       
-//       stage('Copy') {
-            
-//             steps {
-//                   sshagent(['sshkey']) {
+      stage('Copy') {  
+            steps {
+                  sshagent(['sshkey']) {
                        
-//                         sh "scp -o StrictHostKeyChecking=no deploy-tomcat.yaml root@192.168.1.239:/root/demo/"
-//                     }
-//                 }
-//       } 
+                        sh "scp -o StrictHostKeyChecking=no deploy-tomcat.yaml \
+                            root@192.168.1.239:/root/demo/"
+                    }
+                }
+      } 
 
-//  /*      stage('Waiting for Approvals') {
-            
-//           steps{
+      stage('Waiting for Approvals') {        
+            steps{
+			        	input('Test Completed ? Please provide  Approvals for Prod Release ?')
+			         }
+      } 
 
-// 			        	input('Test Completed ? Please provide  Approvals for Prod Release ?')
-// 			         }
-//       } */
-
-//       stage('Deploy Artifacts to Production') {
-            
-//             steps {
-//                   sshagent(['sshkey']) {
+      stage('Deploy Artifacts to Production') {       
+            steps {
+                  sshagent(['sshkey']) {
                        
-//                         sh "ssh -o StrictHostKeyChecking=no root@192.168.1.239 -C \"sudo ansible-playbook /root/demo/deploy-tomcat.yaml\""
-                        
-                                                
-//                     }
-//                 }
-            
-//         }      
-        
-     
+                        sh "ssh -o StrictHostKeyChecking=no root@192.168.1.239 \
+                           -C \"sudo ansible-playbook /root/demo/deploy-tomcat.yaml\""                          
+                    }
+                }
+        }      
+      
     }
 }
