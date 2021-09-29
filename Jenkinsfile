@@ -11,11 +11,11 @@ pipeline {
               }
       }
     	  
-// 	    stage ('Build')  {
-// 	      steps {
-//                    sh "mvn clean package"
-//               }
-//          }
+	    stage ('Build')  {
+	      steps {
+                   sh "mvn clean package"
+              }
+         }
 
 //       stage("Unit Test & Integration Test") {
 //             steps {
