@@ -1,8 +1,8 @@
 pipeline {
   agent any
-  tools {
-    maven 'M2_HOME'
-        }
+    environment {
+        PATH = "/opt/maven/bin/:$PATH"
+    }
     stages {
 
       stage ('Checkout SCM'){
