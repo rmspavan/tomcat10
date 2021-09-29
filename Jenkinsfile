@@ -3,113 +3,113 @@ pipeline {
   tools {
     maven 'M2_HOME'
         }
-    stages {
+//     stages {
 
-      stage ('Checkout SCM'){
-        steps {
-          checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'git', url: 'https://github.com/rmspavan/tomcat10.git']]])
-              }
-      }
+//       stage ('Checkout SCM'){
+//         steps {
+//           checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'git', url: 'https://github.com/rmspavan/tomcat10.git']]])
+//               }
+//       }
     	  
-	    stage ('Build')  {
-	      steps {
-                   sh "mvn clean package"
-              }
-         }
+// 	    stage ('Build')  {
+// 	      steps {
+//                    sh "mvn clean package"
+//               }
+//          }
 
-      stage("Unit Test & Integration Test") {
-            steps {
-                script {
-                    // Test complied source code
-                    sh "mvn -B clean test" 
-                    sh "mvn -B clean verify -DskipTests=true"
-                }
-            }
-      }
+//       stage("Unit Test & Integration Test") {
+//             steps {
+//                 script {
+//                     // Test complied source code
+//                     sh "mvn -B clean test" 
+//                     sh "mvn -B clean verify -DskipTests=true"
+//                 }
+//             }
+//       }
 
-      /*stage("Integration Test") {
-            steps {
-                script {
-                    // Run checks on results of integration tests to ensure quality criteria are met
-                    sh "mvn -B clean verify -DskipTests=true" 
-                }
-            }
-      }*/
+//       /*stage("Integration Test") {
+//             steps {
+//                 script {
+//                     // Run checks on results of integration tests to ensure quality criteria are met
+//                     sh "mvn -B clean verify -DskipTests=true" 
+//                 }
+//             }
+//       }*/
 
-      stage ('SonarQube Analysis') {
-        steps {
-              withSonarQubeEnv('sonar') {
-                 sh 'mvn -U clean install sonar:sonar'
-				      }
-          }
-      }
+//       stage ('SonarQube Analysis') {
+//         steps {
+//               withSonarQubeEnv('sonar') {
+//                  sh 'mvn -U clean install sonar:sonar'
+// 				      }
+//           }
+//       }
     
-	    stage ('Artifact')  {
-	      steps {
-           rtServer (
-             id: "Artifactory",
-             url: 'http://192.168.1.245:8082/artifactory',
-             username: 'admin',
-             password: 'P@ssw0rd',
-             bypassProxy: true,
-             timeout: 300
-                    )    
+// 	    stage ('Artifact')  {
+// 	      steps {
+//            rtServer (
+//              id: "Artifactory",
+//              url: 'http://192.168.1.245:8082/artifactory',
+//              username: 'admin',
+//              password: 'P@ssw0rd',
+//              bypassProxy: true,
+//              timeout: 300
+//                     )    
       
     
-	         rtUpload (
-              serverId: "Artifactory" ,
-                    spec: '''{
-                       "files": [
-                         {
-                           "pattern": "*.war",
-                           "target": "webapp-libs-snapshot-local"
-                         }
-                                ]
-                              }''',
-                          ) 
-              }
-      }
+// 	         rtUpload (
+//               serverId: "Artifactory" ,
+//                     spec: '''{
+//                        "files": [
+//                          {
+//                            "pattern": "*.war",
+//                            "target": "webapp-libs-snapshot-local"
+//                          }
+//                                 ]
+//                               }''',
+//                           ) 
+//               }
+//       }
     
-      stage ('Publish build info') {
-        steps{
-            rtPublishBuildInfo(
-                serverId: "Artifactory"
-            )
+//       stage ('Publish build info') {
+//         steps{
+//             rtPublishBuildInfo(
+//                 serverId: "Artifactory"
+//             )
             
-          }
-      }  
+//           }
+//       }  
       
-      stage('Copy') {
+//       stage('Copy') {
             
-            steps {
-                  sshagent(['sshkey']) {
+//             steps {
+//                   sshagent(['sshkey']) {
                        
-                        sh "scp -o StrictHostKeyChecking=no deploy-tomcat.yaml root@192.168.1.239:/root/demo/"
-                    }
-                }
-      } 
+//                         sh "scp -o StrictHostKeyChecking=no deploy-tomcat.yaml root@192.168.1.239:/root/demo/"
+//                     }
+//                 }
+//       } 
 
- /*      stage('Waiting for Approvals') {
+//  /*      stage('Waiting for Approvals') {
             
-          steps{
+//           steps{
 
-			        	input('Test Completed ? Please provide  Approvals for Prod Release ?')
-			         }
-      } */
+// 			        	input('Test Completed ? Please provide  Approvals for Prod Release ?')
+// 			         }
+//       } */
 
-      stage('Deploy Artifacts to Production') {
+//       stage('Deploy Artifacts to Production') {
             
-            steps {
-                  sshagent(['sshkey']) {
+//             steps {
+//                   sshagent(['sshkey']) {
                        
-                        sh "ssh -o StrictHostKeyChecking=no root@192.168.1.239 -C \"sudo ansible-playbook /root/demo/deploy-tomcat.yaml\""
+//                         sh "ssh -o StrictHostKeyChecking=no root@192.168.1.239 -C \"sudo ansible-playbook /root/demo/deploy-tomcat.yaml\""
                         
                                                 
-                    }
-                }
+//                     }
+//                 }
             
-        }      
+//         }      
         
      
-    }
+//    }
 }
