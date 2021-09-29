@@ -1,7 +1,8 @@
 pipeline {
   agent any
-    environment {
-        PATH = "/opt/maven/bin/:$PATH"
+  tools {
+    maven 'M2_HOME'
+        }
     }
     stages {
 
