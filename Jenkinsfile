@@ -28,7 +28,7 @@ pipeline {
       stage('Waiting for Approvals') { 
         steps{
 
-              input(' ?')
+              input('Integration test completes. Proceed to upload program artifact?')
              }
       }   
     
