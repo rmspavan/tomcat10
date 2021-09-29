@@ -58,14 +58,14 @@ pipeline {
               }
       }
     
-//       stage ('Publish build info') {
-//         steps{
-//             rtPublishBuildInfo(
-//                 serverId: "Artifactory"
-//             )
+      stage ('Publish build info') {
+        steps{
+            rtPublishBuildInfo(
+                serverId: "Artifactory"
+            )
             
-//           }
-//       }  
+          }
+      }  
       
 //       stage('Copy') {
             
