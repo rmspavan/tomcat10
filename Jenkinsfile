@@ -3,13 +3,13 @@ pipeline {
   tools {
     maven 'M2_HOME'
         }
-//     stages {
+    stages {
 
-//       stage ('Checkout SCM'){
-//         steps {
-//           checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'git', url: 'https://github.com/rmspavan/tomcat10.git']]])
-//               }
-//       }
+      stage ('Checkout SCM'){
+        steps {
+          checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'git', url: 'https://github.com/rmspavan/tomcat10.git']]])
+              }
+      }
     	  
 // 	    stage ('Build')  {
 // 	      steps {
