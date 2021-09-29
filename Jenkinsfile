@@ -72,8 +72,8 @@ pipeline {
                   sshagent(['sshkey']) {
                        
                         sh """
-                        "scp -o StrictHostKeyChecking=no deploy-tomcat.yaml 
-                            root@192.168.1.239:/root/demo/"
+                        scp -o StrictHostKeyChecking=no deploy-tomcat.yaml 
+                            root@192.168.1.239:/root/demo/
                         """
                     }
                 }
