@@ -25,7 +25,7 @@ pipeline {
           }
       }
 
-      stage('Waiting for Approvals') { 
+      stage('Waiting for Approvals to upload artifact to Jfrog') { 
         steps{
 
               input('Integration test completes. Proceed to upload program artifact?')
@@ -77,7 +77,7 @@ pipeline {
                 }
       } 
 
-      stage('Waiting for Approvals') {        
+      stage('Waiting for Approvals to deploy to prod apps server') {        
             steps{
 			        	input('Test Completed ? Please provide  Approvals for Prod Release ?')
 			         }
