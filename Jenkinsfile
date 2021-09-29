@@ -71,8 +71,10 @@ pipeline {
             steps {
                   sshagent(['sshkey']) {
                        
-                        sh "scp -o StrictHostKeyChecking=no deploy-tomcat.yaml 
+                        sh """
+                        "scp -o StrictHostKeyChecking=no deploy-tomcat.yaml 
                             root@192.168.1.239:/root/demo/"
+                        """
                     }
                 }
       } 
@@ -83,15 +85,15 @@ pipeline {
 			         }
       } 
 
-      stage('Deploy Artifacts to Production') {       
-            steps {
-                  sshagent(['sshkey']) {
+      // stage('Deploy Artifacts to Production') {       
+      //       steps {
+      //             sshagent(['sshkey']) {
                        
-                        sh "ssh -o StrictHostKeyChecking=no root@192.168.1.239 
-                           -C \"sudo ansible-playbook /root/demo/deploy-tomcat.yaml\""                          
-                    }
-                }
-        }      
+      //                   sh "ssh -o StrictHostKeyChecking=no root@192.168.1.239 
+      //                      -C \"sudo ansible-playbook /root/demo/deploy-tomcat.yaml\""                          
+      //               }
+      //           }
+      //   }      
       
     }
 }
