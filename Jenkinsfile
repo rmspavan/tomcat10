@@ -5,67 +5,67 @@ pipeline {
         }
     stages {
 
-      stage ('Checkout SCM'){
-        steps {
-          checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'git', url: 'https://github.com/rmspavan/tomcat10.git']]])
-              }
-      }
+      // stage ('Checkout SCM'){
+      //   steps {
+      //     checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'git', url: 'https://github.com/rmspavan/tomcat10.git']]])
+      //         }
+      // }
     	  
-	    stage ('Build')  {
-	      steps {
-                   sh "mvn clean package"
-              }
-         }
+	    // stage ('Build')  {
+	    //   steps {
+      //              sh "mvn clean package"
+      //         }
+      //    }
 
-      stage ('SonarQube Analysis') {
-        steps {
-              withSonarQubeEnv('sonar') {
-                 sh 'mvn -U clean install sonar:sonar'
-				      }
-          }
-      }
+      // stage ('SonarQube Analysis') {
+      //   steps {
+      //         withSonarQubeEnv('sonar') {
+      //            sh 'mvn -U clean install sonar:sonar'
+			// 	      }
+      //     }
+      // }
 
-      stage('Waiting for Approvals to upload artifact to Jfrog') { 
-        steps{
+      // stage('Waiting for Approvals to upload artifact to Jfrog') { 
+      //   steps{
 
-              input('Integration test completes. Proceed to upload program artifact?')
-             }
-      }   
+      //         input('Integration test completes. Proceed to upload program artifact?')
+      //        }
+      // }   
     
-	    stage ('Artifact')  {
-	      steps {
-           rtServer (
-             id: "Artifactory",
-             url: 'http://192.168.1.245:8082/artifactory',
-             username: 'admin',
-             password: 'P@ssw0rd',
-             bypassProxy: true,
-             timeout: 300
-                    )    
+	    // stage ('Artifact')  {
+	    //   steps {
+      //      rtServer (
+      //        id: "Artifactory",
+      //        url: 'http://192.168.1.245:8082/artifactory',
+      //        username: 'admin',
+      //        password: 'P@ssw0rd',
+      //        bypassProxy: true,
+      //        timeout: 300
+      //               )    
       
     
-	         rtUpload (
-              serverId: "Artifactory" ,
-                    spec: '''{
-                       "files": [
-                         {
-                           "pattern": "*.war",
-                           "target": "cicd-demo-libs-snapshot-local"
-                         }
-                                ]
-                              }''',
-                          ) 
-              }
-      }
+	    //      rtUpload (
+      //         serverId: "Artifactory" ,
+      //               spec: '''{
+      //                  "files": [
+      //                    {
+      //                      "pattern": "*.war",
+      //                      "target": "cicd-demo-libs-snapshot-local"
+      //                    }
+      //                           ]
+      //                         }''',
+      //                     ) 
+      //         }
+      // }
     
-      stage ('Publish build info') {
-        steps{
-            rtPublishBuildInfo(
-                serverId: "Artifactory"
-            )
+      // stage ('Publish build info') {
+      //   steps{
+      //       rtPublishBuildInfo(
+      //           serverId: "Artifactory"
+      //       )
             
-          }
-      }  
+      //     }
+      // }  
       
       stage('Copy') {  
             steps {
