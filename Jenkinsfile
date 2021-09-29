@@ -25,38 +25,38 @@ pipeline {
           }
       }
 
-      // stage('Waiting for Approvals') { 
-      //   steps{
+      stage('Waiting for Approvals') { 
+        steps{
 
-      //         input(' ?')
-      //        }
-      // }   
+              input(' ?')
+             }
+      }   
     
-// 	    stage ('Artifact')  {
-// 	      steps {
-//            rtServer (
-//              id: "Artifactory",
-//              url: 'http://192.168.1.245:8082/artifactory',
-//              username: 'admin',
-//              password: 'P@ssw0rd',
-//              bypassProxy: true,
-//              timeout: 300
-//                     )    
+	    stage ('Artifact')  {
+	      steps {
+           rtServer (
+             id: "Artifactory",
+             url: 'http://192.168.1.245:8082/artifactory',
+             username: 'admin',
+             password: 'P@ssw0rd',
+             bypassProxy: true,
+             timeout: 300
+                    )    
       
     
-// 	         rtUpload (
-//               serverId: "Artifactory" ,
-//                     spec: '''{
-//                        "files": [
-//                          {
-//                            "pattern": "*.war",
-//                            "target": "webapp-libs-snapshot-local"
-//                          }
-//                                 ]
-//                               }''',
-//                           ) 
-//               }
-//       }
+	         rtUpload (
+              serverId: "Artifactory" ,
+                    spec: '''{
+                       "files": [
+                         {
+                           "pattern": "*.war",
+                           "target": "webapp-libs-snapshot-local"
+                         }
+                                ]
+                              }''',
+                          ) 
+              }
+      }
     
 //       stage ('Publish build info') {
 //         steps{
