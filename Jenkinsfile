@@ -71,7 +71,7 @@ pipeline {
             steps {
                   sshagent(['sshkey']) {
                        
-                        sh "scp -o StrictHostKeyChecking=no deploy-tomcat.yaml \
+                        sh "scp -o StrictHostKeyChecking=no deploy-tomcat.yaml 
                             root@192.168.1.239:/root/demo/"
                     }
                 }
@@ -87,7 +87,7 @@ pipeline {
             steps {
                   sshagent(['sshkey']) {
                        
-                        sh "ssh -o StrictHostKeyChecking=no root@192.168.1.239 \
+                        sh "ssh -o StrictHostKeyChecking=no root@192.168.1.239 
                            -C \"sudo ansible-playbook /root/demo/deploy-tomcat.yaml\""                          
                     }
                 }
