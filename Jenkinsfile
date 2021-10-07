@@ -1,3 +1,9 @@
+node {
+   emailext mimeType: 'text/html',
+                 subject: "[Jenkins]${currentBuild.fullDisplayName}",
+                 to: "cheeheng.tan@systemizerinc.com",
+                 body: '''Please go to console output of ${BUILD_URL}input to Approve or Reject.</br> <a href="${BUILD_URL}input">Click to Approve/Reject</a>'''
+}
 pipeline {
   agent any
   tools {
@@ -24,14 +30,7 @@ pipeline {
 				      }
           }
       }
-
-      stage('Waiting for Approvals to upload artifact to Jfrog') { 
-        steps{
-
-              input('Integration test completes. Proceed to upload program artifact?')
-             }
-      }   
-    
+       
 	    stage ('Artifact')  {
 	      steps {
            rtServer (
@@ -76,12 +75,20 @@ pipeline {
                 }
       } 
 
-      stage('Waiting for Approvals to deploy to prod apps server') {        
-            steps{
-			        	input('Test Completed ? Please provide  Approvals for Prod Release ?')
-			         }
-      } 
-
+      stage('Waiting for Approvals to Deploy to Production Application Server') { 
+        steps{
+            input {
+                message "Should we continue?"
+                ok "Yes"
+            }
+            when {
+                expression { user == 'hardCodeApproverJenkinsId'}
+            }
+            steps {
+                echo 'Approved Successfully'
+            }
+         }
+      }   
       stage('Deploy Artifacts to Production') {       
             steps {
                   sshagent(['sshkey']) {
