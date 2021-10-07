@@ -76,18 +76,16 @@ pipeline {
       } 
 
       stage('Waiting for Approvals to Deploy to Production Application Server') { 
-        steps{
             input {
-                message "Should we continue?"
-                ok "Yes"
-            }
-            when {
-                expression { user == 'hardCodeApproverJenkinsId'}
-            }
+                   message "Should we continue?"
+                   ok "Yes"
+                }
+                when {
+                   expression { user == 'hardCodeApproverJenkinsId'}
+                }
             steps {
                 echo 'Approved Successfully'
             }
-         }
       }   
       stage('Deploy Artifacts to Production') {       
             steps {
